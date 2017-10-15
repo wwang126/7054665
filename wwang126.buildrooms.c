@@ -4,6 +4,7 @@
 
 //Room struct that defines the room
 struct room {
+    int id; //Room ID 
     int roomType;//Type of room
     char *name;//Name of room
     int connectOut;//Number of outbound connections
