@@ -15,9 +15,11 @@ struct room {
     struct room* connections[6];//List of connections
 };
 
-// Create all connections in graph
-while (IsGraphFull() == false) {
-    AddRandomConnection();
+int main(int argc, char* argv[]){
+    // Create all connections in graph
+    while (IsGraphFull() == false) {
+        AddRandomConnection();
+    }
 }
 
 // Returns true if all rooms have 3 to 6 outbound connections, false otherwise
