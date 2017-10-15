@@ -15,11 +15,13 @@ struct room {
     struct room* connections[6];//List of connections
 };
 
+//Main fucntion that runs
 int main(int argc, char* argv[]){
     // Create all connections in graph
     while (IsGraphFull() == false) {
         AddRandomConnection();
     }
+    //TODO: Write rooms onto text file
 }
 
 // Returns true if all rooms have 3 to 6 outbound connections, false otherwise
@@ -32,18 +34,15 @@ void AddRandomConnection() {
     Room A;  //Maybe a struct, maybe global arrays of ints
     Room B;
 
-    while(true)
-    {
-    A = GetRandomRoom();
+    while(true){
+        A = GetRandomRoom();
 
-    if (CanAddConnectionFrom(A) == true)
-        break;
-    }
+        if (CanAddConnectionFrom(A) == true)
+            break;
 
-    do
-    {
-    B = GetRandomRoom();
-    }
+        do{
+        B = GetRandomRoom();
+        }
     while(CanAddConnectionFrom(B) == false || IsSameRoom(A, B) == true);
 
     ConnectRoom(A, B);
