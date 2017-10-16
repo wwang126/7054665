@@ -40,8 +40,11 @@ Room GetRandomRoom() {
 }
 
 // Returns true if a connection can be added from Room x, false otherwise
-bool CanAddConnectionFrom(Room x) {
-    //TODO
+int CanAddConnectionFrom(Room x) {
+    if (room->connectOut < 6) {
+        return 1;
+    }
+    return 0;
 }
 
 // Connects Rooms x and y together, does not check if this connection is valid
@@ -50,9 +53,9 @@ void ConnectRoom(Room x, Room y) {
 }
 
 // Returns true if Rooms x and y are the same Room, false otherwise
-bool IsSameRoom(Room x, Room y) {
+int IsSameRoom(Room x, Room y) {
     if(x->id == y->id){
-        return true;
+        return 1;
     }
-    return false;
+    return 0;
 }
