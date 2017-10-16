@@ -35,26 +35,26 @@ void AddRandomConnection() {
 }
 
 // Returns a random Room, does NOT validate if connection can be added
-Room GetRandomRoom() {
+struct room GetRandomRoom() {
     //TODO
 }
 
 // Returns true if a connection can be added from Room x, false otherwise
-int CanAddConnectionFrom(Room x) {
-    if (room->connectOut < 6) {
+int CanAddConnectionFrom(struct room x) {
+    if (x.connectOut < 6) {
         return 1;
     }
     return 0;
 }
 
 // Connects Rooms x and y together, does not check if this connection is valid
-void ConnectRoom(Room x, Room y) {
+void ConnectRoom(struct room x, struct room y) {
     //TODO
 }
 
 // Returns true if Rooms x and y are the same Room, false otherwise
-int IsSameRoom(Room x, Room y) {
-    if(x->id == y->id){
+int IsSameRoom(struct room x, struct room y) {
+    if(x.id == y.id){
         return 1;
     }
     return 0;
