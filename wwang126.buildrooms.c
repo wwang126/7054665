@@ -31,22 +31,7 @@ bool IsGraphFull() {
 
 // Adds a random, valid outbound connection from a Room to another Room
 void AddRandomConnection() {
-    Room A;  //Maybe a struct, maybe global arrays of ints
-    Room B;
-
-    while(true){
-        A = GetRandomRoom();
-
-        if (CanAddConnectionFrom(A) == true)
-            break;
-
-        do{
-        B = GetRandomRoom();
-        }
-    while(CanAddConnectionFrom(B) == false || IsSameRoom(A, B) == true);
-
-    ConnectRoom(A, B);
-    ConnectRoom(B, A);
+    //TODO
 }
 
 // Returns a random Room, does NOT validate if connection can be added
@@ -66,5 +51,8 @@ void ConnectRoom(Room x, Room y) {
 
 // Returns true if Rooms x and y are the same Room, false otherwise
 bool IsSameRoom(Room x, Room y) {
-    //TODO
+    if(x->id == y->id){
+        return true;
+    }
+    return false;
 }
