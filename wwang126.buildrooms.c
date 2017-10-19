@@ -17,6 +17,13 @@ struct room {
 
 //Main fucntion that runs
 int main(int argc, char* argv[]){
+    struct room* rooms[6];//Array of rooms
+    //Create and allocate memory for 7 rooms
+    for(int i = 0; i < 7; i++){
+        //Allocate space for room
+        //Initilize room with i as id
+        //Add room to rooms Array
+    }
     // Create all connections in graph
     while (IsGraphFull() == false) {
         AddRandomConnection();
