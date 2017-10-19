@@ -28,7 +28,12 @@ int main(int argc, char* argv[]){
     while (IsGraphFull() == false) {
         AddRandomConnection();
     }
-    //TODO: Write rooms onto text file
+    //Write rooms onto text file
+    for(int i = 0; i < 7; i++){
+        //Grab room
+        struct room* = rooms[6];
+        //Print room to file
+    }
 }
 
 // Returns true if all rooms have 3 to 6 outbound connections, false otherwise
