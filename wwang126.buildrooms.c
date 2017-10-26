@@ -90,6 +90,50 @@ void AddConnection(struct room* room1,struct room* room2) {
     room2->connectOut++;
 }
 
+void writeRoomsToDisk(struct room rooms[]){
+    //Get process id for direcotry name
+    pid_t pid = getpid();
+    printf("wwang126.rooms.%d",pid);
+    //Figure out how long the string is
+    unsigned int name = strlen("wwang126.rooms.") + sizeof(pid) + 5;
+    //Create memory to store directory in
+    char *dirName = malloc(name);
+    //Create and store directory name
+    sprintf(dirName, "wwang126.rooms.%d",pid);
+    //Create the directory
+    mkdir(dirName,0777);
+    //Enter directory
+    chdir(dirName);
+    for(int i = 0; i < 7; i++){
+        //Create file
+        FILE* fp = fopen(rooms[i].name, "w");
+        struct room roomIn = rooms[i];
+        //Print room name
+        fprintf(fp,"ROOM NAME: %s\n", roomIn.name);
+        //Print connections
+        for(int i = 0; i < roomIn.connectOut;i++){
+            int j = i + 1;
+            fprintf(fp, "CONNECTION %d: %s\n",j,rooms[roomIn.connections[i]].name);
+        }
+        //Print room types
+        if(roomIn.id == 0){
+            fprintf(fp," ROOM TYPE: START_ROOM\n");
+        }
+        else if(roomIn.id == 6){
+            fprintf(fp, "ROOM TYPE: END_ROOM\n");
+        }
+        else{
+            fprintf(fp, "ROOM TYPE: MID_ROOM\n");
+        }
+        //exit file
+        fclose(fp);
+    }
+    //Exit directory
+    chdir("..");
+    //Free memory
+    free(dirName);
+
+}
 
 // Appends a room to file given a room struct
 void printRoom( struct room roomIn, struct room rooms[]){
@@ -157,6 +201,8 @@ int main(int argc, char* argv[]){
     while (IsGraphFull(rooms) != 1) {
         AddConnection(&rooms[GetRandomRoom()],&rooms[GetRandomRoom()]);
     }
+    writeRoomsToDisk(rooms);
+    /* For testing output
     //Write rooms onto text file
     for(int i = 0; i < 7; i++){
         //Grab room
@@ -164,5 +210,6 @@ int main(int argc, char* argv[]){
         //Print room to file
         printRoom(temp,rooms);
     }
+    */
     free(rooms);//Free memory
 }
