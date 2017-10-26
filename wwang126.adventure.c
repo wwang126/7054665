@@ -42,7 +42,35 @@ char* getDirName(){
     }
     return dirName;
 }
+//Read a room spit it out as a struct
+struct room readRoom(char* name){
+    struct room output;
+    //Open file
+    FILE *file = fopen(name, "r");
+    
+}
+//Read rooms from directory specificed in dir
+void readRooms(struct room* rooms, char* dir){
+    //switch to directory
+    chdir(dir);
+    DIR *srcDir;
+    struct dirent *currDir;
+    //set srcDir to current directory
+    srcDir = opendir (".");
 
+    //set index to 0 for array
+    int index = 0;
+    //Read thru all files in directory
+    while ((currDir = readdir (srcDir))) {
+        printf("Reading %s\n", currDir->d_name);
+        //rooms[index] = readRoom(currDir->d_name);
+        index++;
+    }
+
+    //Clean up and return to original directory
+    closedir(srcDir);
+    chdir("..");
+}
 //Main function that runs
 int main(int argc, char* argv[]){
     //Grab newest directory
@@ -50,6 +78,8 @@ int main(int argc, char* argv[]){
     printf("Grabbing %s\n", dir );
     //Allocate space for rooms
     struct room* rooms = malloc(7*sizeof(struct room));
+    readRooms(rooms,dir);
+    //Free the memory up
     free(rooms);
     return 0;
 }
