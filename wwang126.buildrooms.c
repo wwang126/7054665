@@ -32,11 +32,13 @@ char *room_names[10] = {
 // Returns true if all rooms have 3 to 6 outbound connections, false otherwise
 int IsGraphFull(struct room rooms[]) {
     //iterate thru checking to see if any have less than 3 connections
-    for(int i = 0; i < 7; i++){
+    int i = 0;
+    while(i < 7){
         //if less than 3 connects graph isn't full
         if(rooms[i].connectOut < 3){
             return 0;
         }
+        i++;
     }
     return 1;
 }
@@ -61,18 +63,22 @@ void AddConnection(struct room* room1,struct room* room2) {
         return;
     }
     //Check if the connection already exists
-    for(int i = 0; i < room1->connectOut; i++){
+    int i = 0;
+    while(i < room1->connectOut){
         //if a connection has the same id as room2 exit
         if(room1->connections[i] == room2->id){
             return;
         }
+        i++;
     }
     //Just incase I'll check room 2 also
-    for(int i = 0; i < room2->connectOut; i++){
+    int i = 0;
+    while(i < room2->connectOut){
         //if a connection has the same id as room2 exit
         if(room1->connections[i] == room2->id){
             return;
         }
+        i++;
     }
     //If they have less than 6 connetions, create the connection
     room1->connections[room1->connectOut] = room2->id;
@@ -95,7 +101,8 @@ void writeRoomsToDisk(struct room rooms[]){
     mkdir(dirName,0777);
     //Enter directory
     chdir(dirName);
-    for(int i = 0; i < 7; i++){
+    int i = 0;
+    while (i < 7){
         //Create file, just call it by room name to make it easier
         FILE* fp = fopen(rooms[i].name, "w");
         struct room roomIn = rooms[i];
@@ -118,6 +125,7 @@ void writeRoomsToDisk(struct room rooms[]){
         }
         //exit file
         fclose(fp);
+        i++;
     }
     //Exit directory
     chdir("..");
@@ -131,9 +139,11 @@ void printRoom( struct room roomIn, struct room rooms[]){
     //Print name
     printf("ROOM NAME: %s\n", roomIn.name);
     //Print connections
-    for(int i = 0; i < roomIn.connectOut;i++){
+    int i = 0;
+    for(i < roomIn.connectOut){
         int j = i + 1;
         printf("CONNECTION %d: %s\n",j,rooms[roomIn.connections[i]].name);
+        i++;
     }
     //Print room types
     if(roomIn.id == 0){
@@ -149,16 +159,20 @@ void printRoom( struct room roomIn, struct room rooms[]){
 // Create an array of 0-9 shuffled
 void randomVal(int arrayIn[]){
     //Fill array
-    for(int i = 0; i < 10; i++){
+    int i = 0;
+    while(i < 10){
         arrayIn[i] = i;
+        i++;
     }
     //Shuffle array
-    for (int i = 0; i < 10; i++) {    // shuffle array
+    i = 0;
+    while (i < 10) {    // shuffle array
         int tempVal = arrayIn[i];
         int randIndex = rand() % 10;
 
         arrayIn[i] = arrayIn[randIndex];
         arrayIn[randIndex] = tempVal;
+        i++;
     }
 }
 
@@ -171,7 +185,8 @@ int main(int argc, char* argv[]){
     //Seed random number generator
     srand(time(NULL));
     randomVal(names);
-    for(int i = 0; i < 7; i++){
+    int i = 0;
+    while(i < 7){
         //add room id
         rooms[i].id = i;
         //set connections to 0
@@ -180,6 +195,8 @@ int main(int argc, char* argv[]){
         rooms[i].name = room_names[names[i]];
         //Set type to MID_ROOM
         rooms[i].roomType = 0;
+        //Increment i for loop
+        i++;
     }
     // Create all connections in graph
     while (IsGraphFull(rooms) != 1) {
@@ -196,6 +213,6 @@ int main(int argc, char* argv[]){
     }
     */
     free(rooms);//Free memory
-    //exit properly 
+    //exit properly
     return 0;
 }
