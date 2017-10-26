@@ -26,7 +26,7 @@ const char *room_names[10] = {
     "Tinian",
     "Peleiu",
     "Leyte Gulf"
-}
+};
 
 // Returns true if all rooms have 3 to 6 outbound connections, false otherwise
 int IsGraphFull() {
@@ -79,7 +79,7 @@ int main(int argc, char* argv[]){
         printf("Test\n");
     }
     // Create all connections in graph
-    while (IsGraphFull() == false) {
+    while (IsGraphFull() != 0) {
         AddRandomConnection();
     }
     //Write rooms onto text file

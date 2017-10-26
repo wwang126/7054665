@@ -8,3 +8,4 @@ room:
 	${CC} wwang126.buildrooms.c -o wwang126.buildrooms ${CFLAGS}
 
 clean:
+	rm wwang126.buildrooms
