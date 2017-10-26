@@ -93,13 +93,22 @@ void AddConnection(struct room* room1,struct room* room2) {
 
 // Appends a room to file given a room struct
 void printRoom( struct room roomIn, struct room rooms[]){
-    //Test print statement
-    printf("Room %d, Name: %s\n", roomIn.id, roomIn.name);
-    //connections
-    printf("\tRoom has %d connections", roomIn.connectOut);
+    //Print name
+    printf("ROOM NAME: %s\n", roomIn.name);
     //Print connections
     for(int i = 0; i < roomIn.connectOut;i++){
-        printf("\t\tConnection %d: %s\n",i,rooms[roomIn.connections[i]].name);
+        int j = i + 1;
+        printf("CONNECTION %d: %s\n",j,rooms[roomIn.connections[i]].name);
+    }
+    //Print room types
+    if(roomIn.id == 0){
+        printf("ROOM TYPE: START_ROOM\n");
+    }
+    else if(roomIn.id == 6){
+        printf("ROOM TYPE: END_ROOM\n");
+    }
+    else{
+        printf("ROOM TYPE: MID_ROOM\n");
     }
 }
 // Create an array of 0-9 shuffled
@@ -134,20 +143,20 @@ int main(int argc, char* argv[]){
         rooms[i].connectOut = 0;
         //Pointing name at hardcoded name
         rooms[i].name = room_names[names[i]];
+        //Set type to MID_ROOM
+        rooms[i].roomType = 0;
         //Testing to see if it works
         printf("name = %s, id = %d\n", rooms[i].name, rooms[i].id);
     }
+    /*
+    //Set room types
+    rooms[0].roomType = 1;
+    rooms[6].roomType = 2;
+    */
     // Create all connections in graph
-
     while (IsGraphFull(rooms) != 1) {
         AddConnection(&rooms[GetRandomRoom()],&rooms[GetRandomRoom()]);
     }
-    /*
-    //Testing just a few connection creations
-    for(int i = 0; i<100;i++){
-        AddConnection(&rooms[GetRandomRoom()],&rooms[GetRandomRoom()]);
-    }
-    */
     //Write rooms onto text file
     for(int i = 0; i < 7; i++){
         //Grab room
