@@ -8,37 +8,28 @@
 
 //Room struct that defines the room
 struct room {
-    int id; //Room ID
+    int id;//Room ID, for debugging
     int roomType;//Type of room
     char *name;//Name of room
     int connectOut;//Number of outbound connections
     struct room* connections[6];//List of connections
 };
-
-//Main fucntion that runs
-int main(int argc, char* argv[]){
-    struct room* rooms[6];//Array of rooms
-    //Create and allocate memory for 7 rooms
-    for(int i = 0; i < 7; i++){
-        //Allocate space for room
-        //Initilize room with i as id
-        //Add room to rooms Array
-    }
-    // Create all connections in graph
-    while (IsGraphFull() == false) {
-        AddRandomConnection();
-    }
-    //Write rooms onto text file
-    for(int i = 0; i < 7; i++){
-        //Grab room
-        struct room = rooms[i];
-        //Print room to file
-        printRoom(room);
-    }
+//Hard coded names
+const char *room_names[10] = {
+    "Wake Island",
+    "Coral Sea",
+    "Guadalcanal",
+    "Tarawa Atoll",
+    "Makin Atoll"
+    "Truk Island",
+    "Saipan",
+    "Tinian",
+    "Peleiu",
+    "Leyte Gulf"
 }
 
 // Returns true if all rooms have 3 to 6 outbound connections, false otherwise
-bool IsGraphFull() {
+int IsGraphFull() {
     //TODO
 }
 
@@ -75,5 +66,28 @@ int IsSameRoom(struct room x, struct room y) {
 
 // Appends a room to file given a room struct
 void printRoom( struct room roomIn){
+    //Test print statement
+    printf("Room %d, Name: %s\n", roomIn.id, roomIn.name);
+}
 
+//Main fucntion that runs
+int main(int argc, char* argv[]){
+    //Create and allocate memory for 7 rooms
+    struct room* rooms = malloc(7*sizeof(struct room));
+    for(int i = 0; i < 7; i++){
+        //Initialize rooms
+        printf("Test\n");
+    }
+    // Create all connections in graph
+    while (IsGraphFull() == false) {
+        AddRandomConnection();
+    }
+    //Write rooms onto text file
+    for(int i = 0; i < 7; i++){
+        //Grab room
+        struct room temp = rooms[i];
+        //Print room to file
+        printRoom(temp);
+    }
+    free(rooms);//Free memory
 }
