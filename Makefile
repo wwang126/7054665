@@ -13,8 +13,9 @@ roomTest:
 	./wwang126.buildrooms
 
 adventure:
-	${CC} wwang126.adventure.c -o wwang126.adventure ${CFLAGS}
+	${CC} wwang126.adventure.c -o wwang126.adventure ${CFLAGS} -lpthread
 
 clean:
 	rm wwang126.buildrooms
 	rm -r wwang126.rooms.*
+	rm wwang126.adventure
