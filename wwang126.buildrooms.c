@@ -31,8 +31,9 @@ int main(int argc, char* argv[]){
     //Write rooms onto text file
     for(int i = 0; i < 7; i++){
         //Grab room
-        struct room* = rooms[6];
+        struct room = rooms[i];
         //Print room to file
+        printRoom(room);
     }
 }
 
@@ -70,4 +71,9 @@ int IsSameRoom(struct room x, struct room y) {
         return 1;
     }
     return 0;
+}
+
+// Appends a room to file given a room struct
+void printRoom( struct room roomIn){
+
 }
