@@ -106,7 +106,7 @@ void writeRoomsToDisk(struct room rooms[]){
             int j = i + 1;
             fprintf(fp, "CONNECTION %d: %s\n",j,rooms[roomIn.connections[i]].name);
         }
-        //Print room types
+        //Print room types doesn't have to be random
         if(roomIn.id == 0){
             fprintf(fp,"ROOM TYPE: START_ROOM\n");
         }
@@ -196,4 +196,6 @@ int main(int argc, char* argv[]){
     }
     */
     free(rooms);//Free memory
+    //exit properly 
+    return 0;
 }
