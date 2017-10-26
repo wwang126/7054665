@@ -15,8 +15,8 @@ struct room {
     int connectOut;//Number of outbound connections
     struct room* connections[6];//List of connections
 };
-//Hard coded names
-const char *room_names[10] = {
+//Hard coded names, got rid of const as this stores the acutal name
+char *room_names[10] = {
     "Wake Island",
     "Coral Sea",
     "Guadalcanal",
@@ -99,8 +99,11 @@ int main(int argc, char* argv[]){
         //add room id
         rooms[i].id = i;
         //copy string from names to room
-        printf("Room name = %s\n", room_names[names[i]]);
-        //strcpy(rooms[i].name,room_names[names[i]]);
+        printf("Room name = %s", room_names[names[i]]);
+        //Just point the name directly to the hard coded name
+        rooms[i].name = room_names[names[i]];
+        //Testing to see if it works
+        printf("struct name = %s\n", rooms[i].name);
     }
     // Create all connections in graph
     while (IsGraphFull() != 0) {
