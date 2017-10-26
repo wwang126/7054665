@@ -49,27 +49,21 @@ int GetRandomRoom() {
 
 // Adds a valid connection from a Room to another Room
 void AddConnection(struct room* room1,struct room* room2) {
-    printf("Room1 = %d Room2 = %d\n", room1->id,room2->id);
-
     //If the id's are the same exit.
     if(room1->id == room2->id){
-        printf("\tRooms are the same!\n");
         return;
     }
     //Check if the rooms is maxed out
     if(room1->connectOut > 5){
-        printf("\tRooms are maxed!\n");
         return;
     }
     if(room2->connectOut > 5){
-        printf("\tRooms are maxed!\n");
         return;
     }
     //Check if the connection already exists
     for(int i = 0; i < room1->connectOut; i++){
         //if a connection has the same id as room2 exit
         if(room1->connections[i] == room2->id){
-            printf("\tConnection already exists!\n");
             return;
         }
     }
@@ -77,12 +71,9 @@ void AddConnection(struct room* room1,struct room* room2) {
     for(int i = 0; i < room2->connectOut; i++){
         //if a connection has the same id as room2 exit
         if(room1->connections[i] == room2->id){
-            printf("\tConnection already exists!\n");
             return;
         }
     }
-    printf("Adding connection\n");
-    printf("\t\tr1 connect = %d r2 connect = %d\n",room1->connectOut,room2->connectOut);
     //If they have less than 6 connetions, create the connection
     room1->connections[room1->connectOut] = room2->id;
     room1->connectOut++;
@@ -189,14 +180,7 @@ int main(int argc, char* argv[]){
         rooms[i].name = room_names[names[i]];
         //Set type to MID_ROOM
         rooms[i].roomType = 0;
-        //Testing to see if it works
-        printf("name = %s, id = %d\n", rooms[i].name, rooms[i].id);
     }
-    /*
-    //Set room types
-    rooms[0].roomType = 1;
-    rooms[6].roomType = 2;
-    */
     // Create all connections in graph
     while (IsGraphFull(rooms) != 1) {
         AddConnection(&rooms[GetRandomRoom()],&rooms[GetRandomRoom()]);
