@@ -105,7 +105,7 @@ void writeRoomsToDisk(struct room rooms[]){
     //Enter directory
     chdir(dirName);
     for(int i = 0; i < 7; i++){
-        //Create file
+        //Create file, just call it by room name to make it easier
         FILE* fp = fopen(rooms[i].name, "w");
         struct room roomIn = rooms[i];
         //Print room name
@@ -117,7 +117,7 @@ void writeRoomsToDisk(struct room rooms[]){
         }
         //Print room types
         if(roomIn.id == 0){
-            fprintf(fp," ROOM TYPE: START_ROOM\n");
+            fprintf(fp,"ROOM TYPE: START_ROOM\n");
         }
         else if(roomIn.id == 6){
             fprintf(fp, "ROOM TYPE: END_ROOM\n");
