@@ -13,7 +13,7 @@ struct room {
     int roomType;//Type of room
     char *name;//Name of room
     int connectOut;//Number of outbound connections
-    struct room* connections[6];//List of connections
+    int connections[7];//List of connections
 };
 //Hard coded names, got rid of const as this stores the acutal name
 char *room_names[10] = {
@@ -30,48 +30,80 @@ char *room_names[10] = {
 };
 
 // Returns true if all rooms have 3 to 6 outbound connections, false otherwise
-int IsGraphFull() {
-    //TODO
-}
-
-// Adds a random, valid outbound connection from a Room to another Room
-void AddRandomConnection() {
-    //TODO
-}
-
-// Returns a random Room, does NOT validate if connection can be added
-struct room GetRandomRoom() {
-    //TODO
-}
-
-// Returns true if a connection can be added from Room x, false otherwise
-int CanAddConnectionFrom(struct room x) {
-    if (x.connectOut < 6) {
-        return 1;
+int IsGraphFull(struct room rooms[]) {
+    //iterate thru checking to see if any have less than 3 connections
+    for(int i = 0; i < 7; i++){
+        //if less than 3 connects graph isn't full
+        if(rooms[i].connectOut < 3){
+            return 0;
+        }
     }
-    return 0;
+    return 1;
 }
 
-// Connects Rooms x and y together, does not check if this connection is valid
-void ConnectRoom(struct room x, struct room y) {
-    //TODO
+// Returns a random index, does NOT validate if connection can be added
+int GetRandomRoom() {
+    int out = rand() % 7;
+    return out;
 }
 
-// Returns true if Rooms x and y are the same Room, false otherwise
-int IsSameRoom(struct room x, struct room y) {
-    if(x.id == y.id){
-        return 1;
+// Adds a valid connection from a Room to another Room
+void AddConnection(struct room* room1,struct room* room2) {
+    printf("Room1 = %d Room2 = %d\n", room1->id,room2->id);
+
+    //If the id's are the same exit.
+    if(room1->id == room2->id){
+        printf("\tRooms are the same!\n");
+        return;
     }
-    return 0;
+    //Check if the rooms is maxed out
+    if(room1->connectOut > 5){
+        printf("\tRooms are maxed!\n");
+        return;
+    }
+    if(room2->connectOut > 5){
+        printf("\tRooms are maxed!\n");
+        return;
+    }
+    //Check if the connection already exists
+    for(int i = 0; i < room1->connectOut; i++){
+        //if a connection has the same id as room2 exit
+        if(room1->connections[i] == room2->id){
+            printf("\tConnection already exists!\n");
+            return;
+        }
+    }
+    //Just incase I'll check room 2 also
+    for(int i = 0; i < room2->connectOut; i++){
+        //if a connection has the same id as room2 exit
+        if(room1->connections[i] == room2->id){
+            printf("\tConnection already exists!\n");
+            return;
+        }
+    }
+    printf("Adding connection\n");
+    printf("\t\tr1 connect = %d r2 connect = %d\n",room1->connectOut,room2->connectOut);
+    //If they have less than 6 connetions, create the connection
+    room1->connections[room1->connectOut] = room2->id;
+    room1->connectOut++;
+    room2->connections[room2->connectOut] = room1->id;
+    room2->connectOut++;
 }
+
 
 // Appends a room to file given a room struct
-void printRoom( struct room roomIn){
+void printRoom( struct room roomIn, struct room rooms[]){
     //Test print statement
     printf("Room %d, Name: %s\n", roomIn.id, roomIn.name);
+    //connections
+    printf("\tRoom has %d connections", roomIn.connectOut);
+    //Print connections
+    for(int i = 0; i < roomIn.connectOut;i++){
+        printf("\t\tConnection %d: %s\n",i,rooms[roomIn.connections[i]].name);
+    }
 }
 // Create an array of 0-9 shuffled
-int randomVal(int arrayIn[]){
+void randomVal(int arrayIn[]){
     //Fill array
     for(int i = 0; i < 10; i++){
         arrayIn[i] = i;
@@ -98,23 +130,30 @@ int main(int argc, char* argv[]){
     for(int i = 0; i < 7; i++){
         //add room id
         rooms[i].id = i;
-        //copy string from names to room
-        printf("Room name = %s", room_names[names[i]]);
-        //Just point the name directly to the hard coded name
+        //set connections to 0
+        rooms[i].connectOut = 0;
+        //Pointing name at hardcoded name
         rooms[i].name = room_names[names[i]];
         //Testing to see if it works
-        printf("struct name = %s\n", rooms[i].name);
+        printf("name = %s, id = %d\n", rooms[i].name, rooms[i].id);
     }
     // Create all connections in graph
-    while (IsGraphFull() != 0) {
-        AddRandomConnection();
+
+    while (IsGraphFull(rooms) != 1) {
+        AddConnection(&rooms[GetRandomRoom()],&rooms[GetRandomRoom()]);
     }
+    /*
+    //Testing just a few connection creations
+    for(int i = 0; i<100;i++){
+        AddConnection(&rooms[GetRandomRoom()],&rooms[GetRandomRoom()]);
+    }
+    */
     //Write rooms onto text file
     for(int i = 0; i < 7; i++){
         //Grab room
         struct room temp = rooms[i];
         //Print room to file
-        printRoom(temp);
+        printRoom(temp,rooms);
     }
     free(rooms);//Free memory
 }
