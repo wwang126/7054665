@@ -21,7 +21,7 @@ const char *room_names[10] = {
     "Coral Sea",
     "Guadalcanal",
     "Tarawa Atoll",
-    "Makin Atoll"
+    "Makin Atoll",
     "Truk Island",
     "Saipan",
     "Tinian",
@@ -96,8 +96,11 @@ int main(int argc, char* argv[]){
     srand(time(NULL));
     randomVal(names);
     for(int i = 0; i < 7; i++){
-        //Initialize rooms
-        printf("Randint = %d\n",names[i]);
+        //add room id
+        rooms[i].id = i;
+        //copy string from names to room
+        printf("Room name = %s\n", room_names[names[i]]);
+        //strcpy(rooms[i].name,room_names[names[i]]);
     }
     // Create all connections in graph
     while (IsGraphFull() != 0) {
