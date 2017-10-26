@@ -5,6 +5,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <time.h>
 
 //Room struct that defines the room
 struct room {
@@ -69,14 +70,56 @@ void printRoom( struct room roomIn){
     //Test print statement
     printf("Room %d, Name: %s\n", roomIn.id, roomIn.name);
 }
+// Create an array of 0-9 shuffled
+int randomVal(int arrayIn[]){
+    //Fill array
+    for(int i = 0; i < 10; i++){
+        arrayIn[i] = i;
+    }
+    //Shuffle array
+    for (int i = 0; i < 10; i++) {    // shuffle array
+        int tempVal = arrayIn[i];
+        int randIndex = rand() % 10;
+
+        arrayIn[i] = arrayIn[randIndex];
+        arrayIn[randIndex] = tempVal;
+    }
+
+    /*
+    //Intilizing to -1 so I know if something breaks
+    int out = -1;
+    int exitVal = 1; //Set exit boolean
+    do {
+        //Get random value between 0-10
+        out = rand() % 10;
+        printf("%d\t",out);
+        //Check taken values to see if it's already been used
+        for(int i = 0; i < 7; i++){
+            //If it finds that the value is already taken, sets exit to 0
+            //Thus repeating the loop
+            printf("TakenVal = %d", takenNames[i]);
+            printf("ExitVal = %d", exitVal);
+            if(takenNames[i] == out){
+                //exitVal = 0;
+            }
+        }
+    } while(exitVal != 1);//If larger than 7 do it again
+    //return random value
+    return out;*/
+}
 
 //Main fucntion that runs
 int main(int argc, char* argv[]){
     //Create and allocate memory for 7 rooms
     struct room* rooms = malloc(7*sizeof(struct room));
+    //Create array of non-duplicated Random numbers
+    int takenNames[10];
+    //Seed random number generator
+    srand(time(NULL));
+    randomVal(takenNames);
     for(int i = 0; i < 7; i++){
         //Initialize rooms
-        printf("Test\n");
+        printf("Randint = %d\n",takenNames[i]);
     }
     // Create all connections in graph
     while (IsGraphFull() != 0) {
