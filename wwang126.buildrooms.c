@@ -72,7 +72,7 @@ void AddConnection(struct room* room1,struct room* room2) {
         i++;
     }
     //Just incase I'll check room 2 also
-    int i = 0;
+    i = 0;
     while(i < room2->connectOut){
         //if a connection has the same id as room2 exit
         if(room1->connections[i] == room2->id){
