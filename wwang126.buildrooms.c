@@ -109,11 +109,11 @@ void writeRoomsToDisk(struct room rooms[]){
         //Print room name
         fprintf(fp,"ROOM NAME: %s\n", roomIn.name);
         //Print connections
-        int i = 0;
-        while(i < roomIn.connectOut){
-            int j = i + 1;
+        int k = 0;
+        while(k < roomIn.connectOut){
+            int j = k + 1;
             fprintf(fp, "CONNECTION %d: %s\n",j,rooms[roomIn.connections[i]].name);
-            i++;
+            k++;
         }
         //Print room types doesn't have to be random
         if(roomIn.id == 0){
