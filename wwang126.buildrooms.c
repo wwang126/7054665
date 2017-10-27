@@ -17,16 +17,16 @@ struct room {
 };
 //Hard coded names, got rid of const as this stores the acutal name
 char *room_names[10] = {
-    "Wake Island",
-    "Coral Sea",
+    "Wake_Island",
+    "Coral_Sea",
     "Guadalcanal",
-    "Tarawa Atoll",
-    "Makin Atoll",
-    "Truk Island",
+    "Tarawa_Atoll",
+    "Makin_Atoll",
+    "Truk_Island",
     "Saipan",
     "Tinian",
     "Peleiu",
-    "Leyte Gulf"
+    "Leyte_Gulf"
 };
 
 // Returns true if all rooms have 3 to 6 outbound connections, false otherwise
@@ -112,7 +112,7 @@ void writeRoomsToDisk(struct room rooms[]){
         int k = 0;
         while(k < roomIn.connectOut){
             int j = k + 1;
-            fprintf(fp, "CONNECTION %d: %s\n",j,rooms[roomIn.connections[i]].name);
+            fprintf(fp, "CONNECTION %d: %s\n",j,rooms[roomIn.connections[k]].name);
             k++;
         }
         //Print room types doesn't have to be random
