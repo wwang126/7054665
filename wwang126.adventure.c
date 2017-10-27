@@ -20,6 +20,8 @@ struct room rooms[7];
 int startRoom;
 int endRoom;
 int currId;
+int steps[100];
+int stepCnt;
 
 //Return start room name
 char* getDirName(){
@@ -46,7 +48,54 @@ char* getDirName(){
     }
     return dirName;
 }
-//Get room
+void printWin(){
+    //Add end room to List
+    steps[stepCnt] = endRoom;
+    stepCnt++;
+    //Print end message
+    printf("YOU HAVE FOUND THE END ROOM. CONGRATULATIONS!\n");
+    printf("YOU TOOK %d STEPS. YOUR PATH TO VICTORY WAS:\n", stepCnt);
+    int i = 0;
+    while(i < stepCnt){
+        printf("%s\n",rooms[steps[i]].name);
+        i++;
+    }
+}
+//prints a list of all connections
+void printConnections(struct room roomIn){
+    int i = 0;
+    while(i < roomIn.connectOut - 1){
+        printf("%s, ",roomIn.connections[i]->name);
+        i++;
+    }
+    //Special handling for last item
+    printf("%s.\n",roomIn.connections[i]->name);
+}
+
+//Checks if room is connected, 0 if connected, 1 if not
+int isConnected(char* name,struct room roomIn){
+    int i = 0;
+    while(i < roomIn.connectOut){
+        if(strcmp(roomIn.connections[i]->name,name) == 0){
+            return 0;
+        }
+        i++;
+    }
+    return 1;
+}
+
+//Returns 0 if there is a room by that name, 1 otherwise
+int isRoom(char* name){
+    int i = 0;
+    while (i < 7){
+        if(strcmp(rooms[i].name,name) == 0){
+            return 0;
+        }
+        i++;
+    }
+    return 1;
+}
+//Get room give the name of a room
 struct room* getRoom(char* name){
     int i = 0;
     while (i < 7){
@@ -55,6 +104,7 @@ struct room* getRoom(char* name){
         }
         i++;
     }
+    return 0;
 }
 //connect the rooms
 void connectRooms(char* name){
@@ -75,6 +125,7 @@ void connectRooms(char* name){
         printf(" Temp is %s\n",temp);
         rooms[currId].connections[connectIndex-1] = getRoom(temp);
     } while(read != 0);
+    rooms[currId].connectOut = connectIndex;
     fscanf(file, "ROOM TYPE: %s\n", temp);
     printf("Room type is %s\n",temp);
     if (strcmp(temp, "START_ROOM") == 0) {
@@ -193,6 +244,35 @@ int main(int argc, char* argv[]){
     char* dir = getDirName();
     printf("Grabbing %s\n", dir );
     readRooms(rooms,dir);
+    int gameCont = 1;
+    currId = startRoom;
+    char input[15];
+    int stepCnt = 0;
+    while(gameCont != 0){
+        //Print info about room
+        printf("CURRENT LOCATION: %s\n", rooms[currId].name );
+        printf("POSSIBLE CONNECTIONS: ");
+        printConnections(rooms[currId]);
+        printf("WHERE TO?>");
+
+        //Get user input
+        fgets(input, 15, stdin);
+        //Get rid of newline
+        strtok(input, "\n");
+        //Input validation, if connected
+        if(isConnected(input,rooms[currId]) == 0){
+            //Add current room to steps taken and increment steps
+            steps[stepCnt] = currId;
+            stepCnt++;
+            //Set curr room to new room
+            currId = getRoom(input)->id;
+            //Check for win
+            if(currId == endRoom){
+                printWin();
+            }
+        }
+        printf("HUH? I DON’T UNDERSTAND THAT ROOM. TRY AGAIN.\n");
+    }
     //TODO Free memory
     return 0;
 }
