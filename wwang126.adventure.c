@@ -50,20 +50,46 @@ char* getDirName(){
 struct room* getRoom(char* name){
     int i = 0;
     while (i < 7){
-        if(strcmp(rooms[i].name,name)){
+        if(strcmp(rooms[i].name,name) == 0){
             return &rooms[i];
         }
         i++;
     }
 }
 //connect the rooms
-struct room connectRooms(char* name){
-    struct room output;
+void connectRooms(char* name){
     char temp[15];
     int connectIndex = 0;
     //Open file
     FILE *file = fopen(name, "r");
     //Move line pointer past first line
+    fscanf(file, "ROOM NAME: %s\n", temp);
+    if(strcmp(rooms[currId].name,temp) != 0){
+        printf("Error!\n");
+    }
+    //Create int to read
+    int read;
+    do {
+        read = fscanf(file, "CONNECTION %d: %s\n",&connectIndex, temp);
+        printf("read is %d",read);
+        printf(" Temp is %s\n",temp);
+        rooms[currId].connections[connectIndex-1] = getRoom(temp);
+    } while(read != 0);
+    fscanf(file, "ROOM TYPE: %s\n", temp);
+    printf("Room type is %s\n",temp);
+    if (strcmp(temp, "START_ROOM") == 0) {
+        printf("it's a Start Room!");
+        startRoom = currId;
+    }
+    if (strcmp(temp, "END_ROOM") == 0) {
+        printf("it's a End Room!");
+        endRoom = currId;
+    }
+    fclose(file);
+}
+
+
+    /*------------------------------------
     fseek(file,11,SEEK_CUR);
     fgets(temp,13,file);
 
@@ -80,8 +106,9 @@ struct room connectRooms(char* name){
     } while(strstr(temp,"_ROOM") != NULL);
     //CLose file
     fclose(file);
-    return output;
-}
+    */
+
+
 //Read in the names and populate the array
 void createRooms(char* name){
     //Allocate space for name of node
