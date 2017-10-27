@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <time.h>
 #include <dirent.h>
+#include <pthread.h>
 
 //Room struct that defines the room
 struct room {
@@ -22,6 +23,10 @@ int endRoom;
 int currId;
 int steps[100];
 int stepCnt;
+int gameCont;
+
+//Add mutex as global variable so both threads can access
+pthread_mutex_t mutex;
 
 //Return start room name
 char* getDirName(){
@@ -135,25 +140,6 @@ void connectRooms(char* name){
 }
 
 
-    /*------------------------------------
-    fseek(file,11,SEEK_CUR);
-    fgets(temp,13,file);
-
-    do {
-        //Move cursor to room name
-        fseek(file,14,SEEK_CUR);
-        //Grab name
-        fgets(temp,13,file);
-        //remove the new line
-        strtok(temp, "\n");
-        printf("Reading %s\n",temp);
-        output.connections[connectIndex-1] = getRoom(temp);
-        printf("Connect index %d\n",connectIndex);
-    } while(strstr(temp,"_ROOM") != NULL);
-    //CLose file
-    fclose(file);
-    */
-
 
 //Read in the names and populate the array
 void createRooms(char* name){
@@ -206,6 +192,33 @@ void readRooms(struct room* rooms, char* dir){
     closedir(srcDir2);
     chdir("..");
 }
+//Writes time to file in secondary thread
+void timeThread(void* arg){
+    arg = 0;
+    FILE* file;
+    time_t currTime;
+    struct tm* timeStruct;
+    char timeStr[50];
+    //Standard loop while game is playing
+    while(gameCont != 0){
+        //Lock thread
+        pthread_mutex_lock(&mutex);
+        //Open file for writing
+        file = fopen("./currentTime.txt", "w+");
+        //grab time
+        time(&currTime);
+        //convert time to local time form unix time?
+        timeStruct = localtime(&currTime);
+        //Does this actually work?
+        strftime(timeStr , 50, "%I:%M%p, %A, %B %d, %Y", timeStruct);
+        //write to file
+        fprintf(file, timeStr);
+        //close file
+        fclose(file);
+        //Unlock thread
+        pthread_mutex_unlock(&mutex);
+    }
+}
 //Main function that runs
 int main(int argc, char* argv[]){
     //Grab newest directory
@@ -213,10 +226,23 @@ int main(int argc, char* argv[]){
     //read in the rooms
     readRooms(rooms,dir);
     //Set up ints for while loop
-    int gameCont = 1;
+    gameCont = 1;
     currId = startRoom;
     char input[15];
+    char timeStr[50];
     stepCnt = 0;
+    //Create file for grabbing time
+    FILE* file;
+
+    //Create thread and mutex
+    pthread_t thread;
+    //Create mutex
+    pthread_mutex_init(&mutex, NULL);
+    //Create thread
+    pthread_create(&thread, NULL, &timeThread, &close);
+    pthread_mutex_lock(&mutex);
+
+
     while(gameCont != 0){
         //Print info about room
         printf("CURRENT LOCATION: %s\n", rooms[currId].name );
@@ -228,8 +254,21 @@ int main(int argc, char* argv[]){
         fgets(input, 15, stdin);
         //Get rid of newline
         strtok(input, "\n");
-        //Input validation, if connected
-        if(isConnected(input,rooms[currId]) == 0){
+        //If time is called
+        if(strcmp(input,"time") == 0){
+            //Unlock thread
+            pthread_mutex_unlock(&mutex);
+            usleep(50); //Sleep for 50 milliseconds to write time
+            pthread_mutex_lock(&mutex); //Relock thread
+            file = fopen("./currentTime.txt", "r"); //read the written file
+            //Grab time
+            fgets(timeStr, 50, file);
+
+            printf("\n%s\n\n", timeStr);
+            fclose(file);
+        }
+        //Otherwise input validation, if connected
+        else if(isConnected(input,rooms[currId]) == 0){
             //Add current room to steps taken and increment steps
             steps[stepCnt] = currId;
             stepCnt++;
