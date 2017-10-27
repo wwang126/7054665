@@ -10,7 +10,6 @@
 //Room struct that defines the room
 struct room {
     int id;//Room ID, for debugging
-    int roomType;//Type of room
     char *name;//Name of room
     int connectOut;//Number of outbound connections
     int connections[7];//List of connections
@@ -195,8 +194,6 @@ int main(int argc, char* argv[]){
         rooms[i].connectOut = 0;
         //Pointing name at hardcoded name
         rooms[i].name = room_names[names[i]];
-        //Set type to MID_ROOM
-        rooms[i].roomType = 0;
         //Increment i for loop
         i++;
     }
