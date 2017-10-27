@@ -247,7 +247,7 @@ int main(int argc, char* argv[]){
     int gameCont = 1;
     currId = startRoom;
     char input[15];
-    int stepCnt = 0;
+    stepCnt = 0;
     while(gameCont != 0){
         //Print info about room
         printf("CURRENT LOCATION: %s\n", rooms[currId].name );
@@ -269,9 +269,12 @@ int main(int argc, char* argv[]){
             //Check for win
             if(currId == endRoom){
                 printWin();
+                return 0;
             }
         }
-        printf("HUH? I DON’T UNDERSTAND THAT ROOM. TRY AGAIN.\n");
+        else{
+            printf("HUH? I DON’T UNDERSTAND THAT ROOM. TRY AGAIN.\n");
+        }
     }
     //TODO Free memory
     return 0;
