@@ -212,7 +212,7 @@ void timeThread(void* arg){
         //Does this actually work?
         strftime(timeStr , 50, "%I:%M%p, %A, %B %d, %Y", timeStruct);
         //write to file
-        fprintf(file, timeStr);
+        fprintf(file, "%s", timeStr);
         //close file
         fclose(file);
         //Unlock thread
@@ -239,7 +239,8 @@ int main(int argc, char* argv[]){
     //Create mutex
     pthread_mutex_init(&mutex, NULL);
     //Create thread
-    pthread_create(&thread, NULL, &timeThread, &close);
+    pthread_create(&thread, NULL, timeThread, &close);
+    //Lock mutex
     pthread_mutex_lock(&mutex);
 
 
