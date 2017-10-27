@@ -121,19 +121,14 @@ void connectRooms(char* name){
     int read;
     do {
         read = fscanf(file, "CONNECTION %d: %s\n",&connectIndex, temp);
-        printf("read is %d",read);
-        printf(" Temp is %s\n",temp);
         rooms[currId].connections[connectIndex-1] = getRoom(temp);
     } while(read != 0);
     rooms[currId].connectOut = connectIndex;
     fscanf(file, "ROOM TYPE: %s\n", temp);
-    printf("Room type is %s\n",temp);
     if (strcmp(temp, "START_ROOM") == 0) {
-        printf("it's a Start Room!");
         startRoom = currId;
     }
     if (strcmp(temp, "END_ROOM") == 0) {
-        printf("it's a End Room!");
         endRoom = currId;
     }
     fclose(file);
@@ -173,27 +168,7 @@ void createRooms(char* name){
     rooms[currId].name = tempName;
     //set id
     rooms[currId].id = currId;
-
-/*---------------------------------------------------
-    //Read in type
-    fscanf(file, "ROOM TYPE: %s\n", tempType);
-    //Save start and end nodes
-    printf("Type is :%s\n",tempType);
-    //if end node
-    if(strcmp(tempType, "END_ROOM") == 0){
-        printf("End room is %s", rooms[currId].name);
-        endRoom = currId;
-    }
-    //if start node
-    if (strcmp(tempType,"START_ROOM") == 0){
-        printf("start room is %s\n", rooms[currId].name);
-        startRoom = currId;
-    }
-----------------------------------*/
     fclose(file);
-
-    //test to see if wrote successfully
-    printf("Added %s\n",rooms[currId].name);
 }
 //Read rooms from directory specified in dir
 void readRooms(struct room* rooms, char* dir){
@@ -216,18 +191,11 @@ void readRooms(struct room* rooms, char* dir){
         }
     }
 
-    int i = 0;
-    while(i<7){
-        printf("Rooms %s at %d\n",rooms[i].name,rooms[i].id );
-        i++;
-    }
-
     //Read thru all files to add in connections
     currId = 0;
     while ((currDir = readdir (srcDir2))) {
         //Only read if isn't system file
         if(strstr(currDir->d_name, ".") == 0){
-            printf("Reading 2: %s\n", currDir->d_name);
             connectRooms(currDir->d_name);
             currId++;
         }
@@ -242,8 +210,9 @@ void readRooms(struct room* rooms, char* dir){
 int main(int argc, char* argv[]){
     //Grab newest directory
     char* dir = getDirName();
-    printf("Grabbing %s\n", dir );
+    //read in the rooms
     readRooms(rooms,dir);
+    //Set up ints for while loop
     int gameCont = 1;
     currId = startRoom;
     char input[15];
@@ -273,7 +242,7 @@ int main(int argc, char* argv[]){
             }
         }
         else{
-            printf("HUH? I DON’T UNDERSTAND THAT ROOM. TRY AGAIN.\n");
+            printf("\nHUH? I DON’T UNDERSTAND THAT ROOM. TRY AGAIN.\n\n");
         }
     }
     //TODO Free memory
